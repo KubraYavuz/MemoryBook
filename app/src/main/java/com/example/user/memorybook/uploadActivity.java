@@ -15,14 +15,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class uploadActivity extends AppCompatActivity {
 
@@ -32,6 +38,7 @@ public class uploadActivity extends AppCompatActivity {
     DatabaseReference myRef; //Veri tabanı için gerekli
     private FirebaseAuth mAuth; //Kimin upload ettiğini bilmek için mauth gerekli
     private StorageReference mStoreRef; //Storage için gerekli
+    Uri selectedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +59,41 @@ public class uploadActivity extends AppCompatActivity {
 
     }
 
-    public void upload(View view){
+    public void upload(View view){ //Her kayıtta images klasörüne kayıt olur
 
+        UUID uuıd=UUID.randomUUID(); //Upload edilen her resim için uuıd kullanılıyor
+        final String imageName="images/"+uuıd+".jpg";
+
+        StorageReference storageReference=mStoreRef.child(imageName);
+        storageReference.putFile(selectedImage).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                //download url
+                    StorageReference newReferance=FirebaseStorage.getInstance().getReference(imageName);
+                    newReferance.getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String downloadURL=uri.toString();
+                            FirebaseUser user=mAuth.getCurrentUser();
+                            String userEmail=user.getEmail();
+
+                            String userComment=postCommentText.getText().toString();
+                        }
+                    });
+                //username
+            }
+        }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(uploadActivity.this,e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void selectImage(View view){
 
 
-        //Eğer izin yoksa izin istenir
+        //Eğer izin yoksa izin istenire
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
         }else {
@@ -87,9 +121,9 @@ public class uploadActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         if(requestCode==2 && resultCode==RESULT_OK && data !=null){
-            Uri image =data.getData(); //Uri resimlerin tutulduğu url dir.O yolu kullanarak bitmap oluşturacağız
+            selectedImage =data.getData(); //Uri resimlerin tutulduğu url dir.O yolu kullanarak bitmap oluşturacağız
             try {
-                Bitmap bitmap=MediaStore.Images.Media.getBitmap(this.getContentResolver(),image);
+                Bitmap bitmap=MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedImage);
                 postImage.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
