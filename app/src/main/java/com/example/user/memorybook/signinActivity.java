@@ -37,7 +37,7 @@ public class signinActivity extends AppCompatActivity {
     public void signUp(View view)
     {
 
-        //Kullanıcı girişinin başarılı olması ve olmaması durumu
+        //Kullanıcı girişinin başarılı olması ve olmaması durumunda
         mAuth.createUserWithEmailAndPassword(emailText.getText().toString(),passwordText.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
