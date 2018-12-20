@@ -78,9 +78,23 @@ public class uploadActivity extends AppCompatActivity {
                             String userEmail=user.getEmail();
 
                             String userComment=postCommentText.getText().toString();
+                            
+                            //Her kullanıcı için ayrı e mail , comment ve url de veritabanına kaydeder.
+                            UUID uuid1=UUID.randomUUID();
+                            String uuidString=uuid1.toString();
+
+                            myRef.child("Posts").child("Post1").child("useremail").setValue(userEmail);
+                            myRef.child("Posts").child("Post1").child("comment").setValue(userComment);
+                            myRef.child("Posts").child("Post1").child("downloadurl").setValue(downloadURL);
+
+                            Toast.makeText(uploadActivity.this,"Post Shared", Toast.LENGTH_SHORT).show();
+
+                            Intent intent =new Intent(getApplicationContext(),feedActivity.class);
+                            startActivity(intent);
                         }
                     });
                 //username
+
             }
         }).addOnFailureListener(this, new OnFailureListener() {
             @Override
