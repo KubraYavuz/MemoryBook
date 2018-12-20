@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "10658926645",
+    "firebase_url": "https://memorybook-34c79.firebaseio.com",
+    "project_id": "memorybook-34c79",
+    "storage_bucket": "memorybook-34c79.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10658926645:android:05a03da9f8c37cbe",
+        "android_client_info": {
+          "package_name": "com.example.user.memorybook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "10658926645-d27ma1s6uq9skah4ttvdcur6hnrnsv0k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbVeZMrMQw671e2tDJbfP4o1WGFceYRME"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
