@@ -16,12 +16,22 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.IOException;
 
 public class uploadActivity extends AppCompatActivity {
 
     ImageView postImage;
     EditText postCommentText;
+    FirebaseDatabase firebaseDatabase; //Veri tabanı oluşturmak için
+    DatabaseReference myRef; //Veri tabanı için gerekli
+    private FirebaseAuth mAuth; //Kimin upload ettiğini bilmek için mauth gerekli
+    private StorageReference mStoreRef; //Storage için gerekli
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +41,18 @@ public class uploadActivity extends AppCompatActivity {
 
         postCommentText=findViewById(R.id.postCommentText);
         postImage=findViewById(R.id.postImageView);
+
+        //Kullanacağım tüm firebase objelerini ve değişkenlerini oluşturdum
+        firebaseDatabase =FirebaseDatabase.getInstance();
+        myRef=firebaseDatabase.getReference();
+
+        mAuth =FirebaseAuth.getInstance();
+
+        mStoreRef=FirebaseStorage.getInstance().getReference();
+
     }
 
     public void upload(View view){
-
 
     }
 
@@ -60,8 +78,6 @@ public class uploadActivity extends AppCompatActivity {
                startActivityForResult(intent,2);
            }
        }
-
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
@@ -80,8 +96,6 @@ public class uploadActivity extends AppCompatActivity {
             }
 
         }
-
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
