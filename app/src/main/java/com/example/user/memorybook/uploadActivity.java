@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class uploadActivity extends AppCompatActivity {
-
+    //DENEME
     ImageView postImage;
     EditText postCommentText;
     FirebaseDatabase firebaseDatabase; //Veri tabanı oluşturmak için
