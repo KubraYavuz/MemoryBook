@@ -15,7 +15,8 @@ import java.util.ArrayList;
 
 public class PostClass extends ArrayAdapter
 {
-    private final ArrayList<String> userEmail;
+
+    private final ArrayList<String> userEmail;//Firebaseden çektiğimiz veriler için değişkenler
     private final ArrayList<String> userComment;
     private final ArrayList<String> userImage;
     private final Activity context;
