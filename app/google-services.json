@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "10658926645-h7qd6lfp5fnb52he41n9492vurq34tib.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.user.memorybook",
+            "certificate_hash": "893e080d0fe13c1ae59d87fbf3b93d38b96b5fb5"
+          }
+        },
+        {
           "client_id": "10658926645-d27ma1s6uq9skah4ttvdcur6hnrnsv0k.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "10658926645-d27ma1s6uq9skah4ttvdcur6hnrnsv0k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
