@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class signinActivity extends AppCompatActivity {
-
+/**
     private FirebaseAuth mAuth;
     EditText emailText;
     EditText passwordText;
@@ -88,5 +88,5 @@ public class signinActivity extends AppCompatActivity {
             }
         });
 
-    }
+    }*/
 }
