@@ -78,7 +78,7 @@ public class uploadActivity extends AppCompatActivity {
                             String userEmail=user.getEmail();
 
                             String userComment=postCommentText.getText().toString();
-                            
+
                             //Her kullanıcı için ayrı e mail , comment ve url de veritabanına kaydeder.
                             UUID uuid1=UUID.randomUUID();
                             String uuidString=uuid1.toString();

@@ -1,9 +1,8 @@
 package com.example.user.memorybook;
-
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,25 +24,25 @@ public class feedActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference myRef;
     ArrayList<String> useremailFromFB;
-    ArrayList<String >userimageFromFB;
-    ArrayList<String>usercommentFB;
+    ArrayList<String> userimageFromFB;
+    ArrayList<String> usercommentFromFB;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {//Menüyü aktiviteye bağladığımız yer
+    public boolean onCreateOptionsMenu(Menu menu) {
 
-        MenuInflater menuInflater=getMenuInflater();
+        MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.add_post,menu);
 
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) { //Menü seçilince ne olacağı
-        if(item.getItemId()==R.id.add_post){ //Eğer buna tıklandıysa intent yap
-            Intent intent=new Intent(getApplicationContext(),uploadActivity.class);
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.add_post) {
+            Intent intent = new Intent(getApplicationContext(), uploadActivity.class);
             startActivity(intent);
         }
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -53,40 +52,46 @@ public class feedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
+        listView = findViewById(R.id.listView);
 
-        listView=findViewById(R.id.listView);
+        useremailFromFB = new ArrayList<String>();
+        usercommentFromFB = new ArrayList<String>();
+        userimageFromFB = new ArrayList<String>();
 
-        useremailFromFB=new ArrayList<String>();
-        usercommentFB=new ArrayList<String>();
-        userimageFromFB=new ArrayList<String>();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = firebaseDatabase.getReference();
 
-        firebaseDatabase=FirebaseDatabase.getInstance();
-        myRef=firebaseDatabase.getReference();
-
-        adapter=new PostClass(useremailFromFB, usercommentFB,userimageFromFB,this); //İndirdiğim verileri postclass a atıyor
+        adapter = new PostClass(useremailFromFB,usercommentFromFB,userimageFromFB,this);
 
         listView.setAdapter(adapter);
 
+        getDataFromFirebase();
     }
 
-    public void getDataFromFirebase(){
-        DatabaseReference newReferance=firebaseDatabase.getReference("Posts");
-        newReferance.addValueEventListener(new ValueEventListener() {
+    public void getDataFromFirebase() {
+
+        DatabaseReference newReference = firebaseDatabase.getReference("Posts");
+        newReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //System.out.println("FBV children: "+ dataSnapshot.getChildren());
-                //System.out.println("FBV key:"+dataSnapshot.getKey());
-                //System.out.println("FBV value: "+dataSnapshot.getValue());
-                //System.out.println("FBV priority: "+dataSnapshot.getPriority());
 
-                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                //System.out.println("FBV children: " + dataSnapshot.getChildren() );
+                //System.out.println("FBV key: " + dataSnapshot.getKey() );
+                //System.out.println("FBV value: " + dataSnapshot.getValue() );
+                //System.out.println("FBV priority: " + dataSnapshot.getPriority() );
 
-                //    System.out.println("FBV ds value"+ds.getValue());
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
-                    HashMap<String,String>hashMap=(HashMap<String, String>) ds.getValue();
-                    System.out.println("FBV useremail:"+hashMap.get("useremail:"));
+                    //System.out.println("FBV ds value: " + ds.getValue());
+
+                    HashMap<String, String> hashMap = (HashMap<String, String>) ds.getValue();
+
+                    //System.out.println("FBV useremail:" + hashMap.get("useremail"));
 
                     useremailFromFB.add(hashMap.get("useremail"));
+                    usercommentFromFB.add(hashMap.get("comment"));
+                    userimageFromFB.add(hashMap.get("downloadurl"));
+                    adapter.notifyDataSetChanged();
 
                 }
 
@@ -97,7 +102,6 @@ public class feedActivity extends AppCompatActivity {
 
             }
         });
-
 
     }
 }
