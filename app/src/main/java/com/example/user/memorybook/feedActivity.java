@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class feedActivity extends AppCompatActivity {
-
+/**
     ListView listView;
     PostClass adapter;
     FirebaseDatabase firebaseDatabase;
@@ -103,5 +103,5 @@ public class feedActivity extends AppCompatActivity {
             }
         });
 
-    }
+    }*/
 }

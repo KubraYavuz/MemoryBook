@@ -25,12 +25,12 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(){
 
         if(fAuth.getCurrentUser()!=null){
-            Log.i("MainActvity","fAuth !=null");
+            Log.i("MainActivity","fAuth !=null");
         }else{
             Intent startIntent=new Intent(MainActivity.this,StartActivity.class);
             startActivity(startIntent);
             finish();
-            Log.i("MainActvity","fAuth ==null");
+            Log.i("MainActivity","fAuth ==null");
         }
     }
 }

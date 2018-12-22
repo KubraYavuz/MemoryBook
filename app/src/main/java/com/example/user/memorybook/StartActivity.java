@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.user.memorybook.user_sign.LoginActivity;
 import com.example.user.memorybook.user_sign.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -50,16 +51,17 @@ public class StartActivity extends AppCompatActivity {
 
     }
     private void login(){
-
+        Intent logIntent=new Intent(StartActivity.this,LoginActivity.class);
+        startActivity(logIntent);
     }
     private void updateUI(){
         if(fAuth.getCurrentUser()!=null){
-            Log.i("StartActvity","fAuth !=null");
+            Log.i("StartActivity","fAuth !=null");
         }else{
             Intent startIntent=new Intent(StartActivity.this,MainActivity.class);
             startActivity(startIntent);
             finish();
-            Log.i("StartActvity","fAuth ==null");
+            Log.i("StartActivity","fAuth ==null");
         }
     }
 }
