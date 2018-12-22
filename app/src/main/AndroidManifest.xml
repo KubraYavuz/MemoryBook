@@ -4,7 +4,6 @@
     package="com.example.user.memorybook">
     /** Kulanıcıyı galeriye götürecek olan izin uses-permission
     android:name="android.permission.WRITE_EXTERNAL_STORAGE"> **/
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".StartActivity"
+        <activity
+            android:name=".StartActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,10 +31,10 @@
             android:label="REGISTER" />
         <activity
             android:name=".user_sign.LoginActivity"
-            android:label="LogIN" >
+            android:label="LogIN"></activity>
+        <activity android:name=".NewNoteActivity"
 
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
