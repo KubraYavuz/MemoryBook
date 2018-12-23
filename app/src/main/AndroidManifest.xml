@@ -34,7 +34,7 @@
             android:label="LogIN"></activity>
         <activity android:name=".NewNoteActivity"
 
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="New Note"></activity>
     </application>
 
 </manifest>

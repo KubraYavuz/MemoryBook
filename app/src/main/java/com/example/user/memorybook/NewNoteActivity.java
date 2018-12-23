@@ -34,7 +34,7 @@ public class NewNoteActivity extends AppCompatActivity {
     private FirebaseAuth fAuth;
     private Menu mainMenu;
     private DatabaseReference fNotesDatabase;
-    private String noteID="no";
+    private String noteID="";
     private boolean isExist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,23 +42,16 @@ public class NewNoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_note);
         try{
             noteID=getIntent().getStringExtra("noteId");
-            if(noteID.equals("no"))
-            {
-                mainMenu.getItem(0).setVisible(false);
-                isExist=false;
-            }
-            else{
-                isExist=true;
+            if (!noteID.trim().equals("")) {
+                isExist = true;
+            } else {
+                isExist = false;
             }
 
         } catch(Exception e)
         {
             e.printStackTrace();
         }
-
-
-
-
 
         btnCreate = (Button) findViewById(R.id.new_note_btn);
         etTitle = (EditText) findViewById(R.id.new_note_title);
@@ -173,10 +166,12 @@ public class NewNoteActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.new_note_delete_btn:
-                if(!noteID.equals("no"))
+                if(isExist)
                 {
                     deleteNote();
 
+                }else{
+                    Toast.makeText(this, "Nothing to delete", Toast.LENGTH_SHORT).show();
                 }
 
                 break;

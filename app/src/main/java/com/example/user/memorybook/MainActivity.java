@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.user.memorybook.user_sign.GridSpacingItemDecoration;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -43,8 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
         mNotesList.setHasFixedSize(true);
         mNotesList.setLayoutManager(gridLayoutManager);
-        //gridLayoutManager.setReverseLayout(true);
-        //gridLayoutManager.setStackFromEnd(true);
+       // gridLayoutManager.setReverseLayout(true);
+       // gridLayoutManager.setStackFromEnd(true);
+        mNotesList.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
 
         fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() != null) {
@@ -52,56 +54,62 @@ public class MainActivity extends AppCompatActivity {
         }
 
         updateUI();
-
+        loadData();
 
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseRecyclerAdapter<NoteModel, NoteViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<NoteModel, NoteViewHolder>(
-                NoteModel.class,
-                R.layout.single_note_layout,
-                NoteViewHolder.class,
-                fNotesDatabase
-        ) {
 
-            @Override
-            protected void populateViewHolder(final NoteViewHolder viewHolder, NoteModel model, int position) {
-               final String noteId = getRef(position).getKey();
-                fNotesDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String title = dataSnapshot.child("title").getValue().toString();
-                        String timestamp = dataSnapshot.child("timestamp").getValue().toString();
-
-                        viewHolder.setNoteTitle(title);
-                        viewHolder.setNoteTime(timestamp);
-
-                        viewHolder.noteCard.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(MainActivity.this, NewNoteActivity.class);
-                                intent.putExtra("noteId", noteId);
-                                startActivity(intent);
-                            }
-                        });
-                    }
-
-
-
-
-                    @Override
-                    public void onCancelled( DatabaseError databaseError) {
-
-                    }
-                });
-            }
-        };
-        mNotesList.setAdapter(firebaseRecyclerAdapter);
     }
 
+private void loadData()
+{
+    Query query = fNotesDatabase.orderByValue();
+    FirebaseRecyclerAdapter<NoteModel, NoteViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<NoteModel, NoteViewHolder>(
+            NoteModel.class,
+            R.layout.single_note_layout,
+            NoteViewHolder.class,
+            query
+    ) {
 
+        @Override
+        protected void populateViewHolder(final NoteViewHolder viewHolder, NoteModel model, int position) {
+            final String noteId = getRef(position).getKey();
+            fNotesDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String title = dataSnapshot.child("title").getValue().toString();
+                    String timestamp = dataSnapshot.child("timestamp").getValue().toString();
+
+                    viewHolder.setNoteTitle(title);
+                 //   viewHolder.setNoteTime(timestamp);
+                    GetTimeAgo getTimeAgo=new GetTimeAgo();
+                    viewHolder.setNoteTime(getTimeAgo.getTimeAgo(Long.parseLong(timestamp),getApplicationContext()));
+
+                    viewHolder.noteCard.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(MainActivity.this, NewNoteActivity.class);
+                            intent.putExtra("noteId", noteId);
+                            startActivity(intent);
+                        }
+                    });
+                }
+
+
+
+
+                @Override
+                public void onCancelled( DatabaseError databaseError) {
+
+                }
+            });
+        }
+    };
+    mNotesList.setAdapter(firebaseRecyclerAdapter);
+}
 
     private void updateUI(){
 
