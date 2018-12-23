@@ -9,8 +9,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     View mView;
 
     TextView textTitle, textTime;
-
-
+    CardView noteCard;
     public NoteViewHolder(View itemView) {
         super(itemView);
 
@@ -19,7 +18,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         textTitle = mView.findViewById(R.id.note_title);
         textTime = mView.findViewById(R.id.note_time);
 
-
+noteCard=mView.findViewById(R.id.note_card);
     }
 
     public void setNoteTitle(String title) {

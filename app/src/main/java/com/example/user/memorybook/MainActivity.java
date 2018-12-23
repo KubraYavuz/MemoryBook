@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void populateViewHolder(final NoteViewHolder viewHolder, NoteModel model, int position) {
-                String noteId = getRef(position).getKey();
+               final String noteId = getRef(position).getKey();
                 fNotesDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -77,7 +77,19 @@ public class MainActivity extends AppCompatActivity {
 
                         viewHolder.setNoteTitle(title);
                         viewHolder.setNoteTime(timestamp);
+
+                        viewHolder.noteCard.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(MainActivity.this, NewNoteActivity.class);
+                                intent.putExtra("noteId", noteId);
+                                startActivity(intent);
+                            }
+                        });
                     }
+
+
+
 
                     @Override
                     public void onCancelled( DatabaseError databaseError) {
@@ -104,7 +116,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
 
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        switch (item.getItemId()) {
+            case R.id.main_new_note_btn:
+                Intent newIntent = new Intent(MainActivity.this, NewNoteActivity.class);
+                startActivity(newIntent);
+                break;
+        }
+
+        return true;
+    }
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
 }
 
 
