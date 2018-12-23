@@ -17,9 +17,12 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +35,7 @@ public class NewNoteActivity extends AppCompatActivity {
     private Menu mainMenu;
     private DatabaseReference fNotesDatabase;
     private String noteID="no";
+    private boolean isExist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,10 @@ public class NewNoteActivity extends AppCompatActivity {
             if(noteID.equals("no"))
             {
                 mainMenu.getItem(0).setVisible(false);
+                isExist=false;
+            }
+            else{
+                isExist=true;
             }
 
         } catch(Exception e)
@@ -73,41 +81,76 @@ public class NewNoteActivity extends AppCompatActivity {
                 } else {
                     Snackbar.make(view, "Boş Alanı Doldur", Snackbar.LENGTH_SHORT).show();
                 }
+                putData();
             }
         });
 
 
     }
+    private void putData() {
+
+        if (isExist) {
+            fNotesDatabase.child(noteID).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild("title") && dataSnapshot.hasChild("content")) {
+                        String title = dataSnapshot.child("title").getValue().toString();
+                        String content = dataSnapshot.child("content").getValue().toString();
+
+                        etTitle.setText(title);
+                        etContent.setText(content);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
     private void createNote(String title,String content)
     {
         if(fAuth.getCurrentUser()!=null)
         {
+                if(isExist)
+                {
+                    // not güncelleme
+                    Map updateMap = new HashMap();
+                    updateMap.put("title", etTitle.getText().toString().trim());
+                    updateMap.put("content", etContent.getText().toString().trim());
+                    updateMap.put("timestamp", ServerValue.TIMESTAMP);
 
-           final  DatabaseReference newNoteRef=fNotesDatabase.push();
-           final Map noteMap = new HashMap();
-            noteMap.put("title", title);
-            noteMap.put("content", content);
-            noteMap.put("timestamp", ServerValue.TIMESTAMP);
-            Thread mainThread=new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    newNoteRef.setValue(noteMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    fNotesDatabase.child(noteID).updateChildren(updateMap);
+
+                    Toast.makeText(this, "Note updated0", Toast.LENGTH_SHORT).show();
+                }else {
+                    // yeni bir not oluşturma işlemi
+                    final DatabaseReference newNoteRef = fNotesDatabase.push();
+                    final Map noteMap = new HashMap();
+                    noteMap.put("title", title);
+                    noteMap.put("content", content);
+                    noteMap.put("timestamp", ServerValue.TIMESTAMP);
+                    Thread mainThread = new Thread(new Runnable() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
+                        public void run() {
+                            newNoteRef.setValue(noteMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
 
-                            if (task.isSuccessful()) {
-                                Toast.makeText(NewNoteActivity.this, "Note added to database", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(NewNoteActivity.this, "ERROR: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(NewNoteActivity.this, "Note added to database", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(NewNoteActivity.this, "ERROR: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
 
+                                }
+                            });
                         }
                     });
+                    mainThread.start();
+
                 }
-            });
-            mainThread.start();
-
-
 
         }
         else{
