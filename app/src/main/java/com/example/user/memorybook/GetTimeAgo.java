@@ -6,7 +6,7 @@ import android.content.Context;
  * Created by SUDA on 16-10-2017.
  */
 
-// zamanı bildiren fonk
+
 public class GetTimeAgo {
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;

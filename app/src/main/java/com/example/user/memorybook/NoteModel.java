@@ -1,6 +1,6 @@
 package com.example.user.memorybook;
 
-//note model formatı tanımlama
+
 public class NoteModel {
 
     public String noteTitle;

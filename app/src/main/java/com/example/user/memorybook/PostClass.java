@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-// postclass
+
 public class PostClass extends ArrayAdapter<String> {
 
 

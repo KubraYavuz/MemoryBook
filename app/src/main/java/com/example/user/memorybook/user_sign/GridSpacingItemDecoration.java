@@ -7,7 +7,6 @@ import android.view.View;
 /**
  * Created by SUDA on 12-09-2017.
  */
-//RecyclerView.ItemDecoration sınıfından kalıtım
 
 public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
