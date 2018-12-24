@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference fNotesDatabase;
 
     @Override
+    // not oluşturma
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
