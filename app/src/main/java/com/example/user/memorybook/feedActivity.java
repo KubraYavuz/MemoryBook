@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+// veritabanı bağlantısı
 public class feedActivity extends AppCompatActivity {
 /**
     ListView listView;

@@ -10,7 +10,7 @@ import android.widget.Button;
 import com.example.user.memorybook.user_sign.LoginActivity;
 import com.example.user.memorybook.user_sign.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
-
+// başlatma ekranı
 public class StartActivity extends AppCompatActivity {
 
     private Button btnReg,btnLog;

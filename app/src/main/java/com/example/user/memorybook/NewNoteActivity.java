@@ -38,6 +38,7 @@ public class NewNoteActivity extends AppCompatActivity {
     private boolean isExist;
     @Override
     //not oluşturma fonksiyonu
+    // yeni not oluşturuluyor
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_note);
